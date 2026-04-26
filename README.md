@@ -5,7 +5,7 @@ A lightweight, animated Bash prompt designed for developers who love **Rust**, *
 ## 👀 Preview
 
 <p align="center">
-  <img src="./assets/preview.jpg" alt="Cat Rocket Prompt Preview" width="700px" style="border-radius: 8px;">
+  <img src="https://github.com/bombman/cat-rocket-prompt/raw/main/assets/preview.png" alt="Cat Rocket Prompt Preview" width="700" style="border-radius: 8px;">
 </p>
 
 ## 🚀 Features
