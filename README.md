@@ -2,6 +2,12 @@
 
 A lightweight, animated Bash prompt designed for developers who love **Rust**, **AI**, and **Clean Terminals**. Featuring a walking cat animation and dynamic Git status integration.
 
+## 👀 Preview
+
+<p align="center">
+  <img src="./assets/preview.jpg" alt="Cat Rocket Prompt Preview" width="700px" style="border-radius: 8px;">
+</p>
+
 ## 🚀 Features
 - **Walking Cat Animation**: The cat cycles through 4 frames every time you hit Enter.
 - **Dynamic Git Status**:
