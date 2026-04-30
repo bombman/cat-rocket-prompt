@@ -1,7 +1,6 @@
 #!/bin/bash
 # ---------------------------------------------------------
-# CAT & ROCKET PROMPT CORE LOGIC
-# Author: Mint/Bom (nova)
+# CAT & ROCKET PROMPT CORE LOGIC (venv-safe version)
 # ---------------------------------------------------------
 
 # Load Git prompt support safely
@@ -11,7 +10,7 @@ elif [ -f /etc/bash_completion.d/git-prompt ]; then
     . /etc/bash_completion.d/git-prompt
 fi
 
-# Path Shortener: converts /home/user/my-project to ~/m/my-project
+# Path Shortener
 short_path_logic() {
     local p="${PWD/#$HOME/~}"
     echo "$p" | awk -F/ '{
@@ -23,45 +22,49 @@ short_path_logic() {
     }'
 }
 
-# Animation frame definitions
+# Animation
 cat_frames=("🐱" "🐈" "😺" "😸")
 cat_i=0
 
-# Main update function
 update_prompt() {
-    local exit_code=$? # Capture status of last command
-    
-    # Increment animation frame
+    local exit_code=$?
+
+    # Animate cat
     cat_i=$(( (cat_i + 1) % 4 ))
     local cat="${cat_frames[$cat_i]}"
 
-    # Color Palette (ANSI)
+    # Colors
     local green="\[\033[1;32m\]"
     local red="\[\033[1;31m\]"
     local blue="\[\033[1;34m\]"
+    local purple="\[\033[1;35m\]"
     local reset="\[\033[0m\]"
 
-    # Set user color based on success/fail
+    # Exit status color
     local user_col="$green"
     [ $exit_code -ne 0 ] && user_col="$red"
 
-    # Git Status Icons
-    local tail_icon="🍺" # Default outside git
+    # 🔥 Detect Python venv
+    local venv=""
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        venv="${purple}($(basename "$VIRTUAL_ENV"))${reset} "
+    fi
+
+    # Git logic
+    local tail_icon="🍺"
     local branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
     if [[ -n "$branch" ]]; then
         if [[ "$branch" == "main" || "$branch" == "master" ]]; then
-            tail_icon="🚀" # Rocket for production branches
+            tail_icon="🚀"
         else
-            tail_icon="🧪" # Flask for feature branches
+            tail_icon="🧪"
         fi
     fi
 
     local s_path=$(short_path_logic)
-    
-    # Construct Final PS1
-    # [Cat] [User] [Path] [GitBranch] [TailIcon]
-    PS1="${cat} ${user_col}\u${reset} ${blue}${s_path}${reset}\$(__git_ps1 ' (%s)') ${tail_icon} \$ "
+
+    # Final PS1
+    PS1="${venv}${cat} ${user_col}\u${reset} ${blue}${s_path}${reset}\$(__git_ps1 ' (%s)') ${tail_icon} \$ "
 }
 
-# Register command
 PROMPT_COMMAND=update_prompt
